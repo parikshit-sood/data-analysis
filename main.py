@@ -16,6 +16,7 @@ axes = axes.ravel()
 
 for i, column in enumerate(study_habits.columns):
     counts = study_habits[column].value_counts().sort_index()
+    counts = counts.reindex(range(1, 6), fill_value=0)  # Fill missing with 0
 
     title = re.search(r"\[(.*?)\]", column).group(1)
 
@@ -31,6 +32,13 @@ for i, column in enumerate(study_habits.columns):
     axes[i].set_xlabel("Response (1-5)", fontsize=8)
     axes[i].set_ylabel("Count", fontsize=8)
     axes[i].tick_params(labelsize=8)
+
+    # Set custom x-axis labels
+    axes[i].set_xticks(range(5))  # 0-4 for zero-indexed xtick positions
+    axes[i].set_xticklabels(
+        ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+        rotation=30,
+    )
 
 for j in range(len(study_habits.columns), len(axes)):
     fig.delaxes(axes[j])
